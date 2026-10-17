@@ -1,0 +1,244 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>La Wikipedia de Pao</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#14152b">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700&family=Rubik:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: portal de noticias de Rivals — barra de último momento, pestañas por sección, grilla de tarjetas cuadradas, nota completa a pantalla entera */
+:root{
+  --bg:#14152b; --panel:#1e2040; --panel-2:#272a52; --line:#363a6b;
+  --fg:#eef0ff; --muted:#a3a8d6; --accent:#ff4d2e; --accent-2:#ffc531; --cool:#5ad1ff;
+  --display:"Chakra Petch","Arial Narrow",system-ui,sans-serif;
+  --body:"Rubik",system-ui,-apple-system,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+html,body{background:var(--bg);color:var(--fg)}
+body{font-family:var(--body);font-size:16px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--accent)}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* ticker */
+.ticker{background:var(--accent);color:#14152b;overflow:hidden;white-space:nowrap;font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.06em;text-transform:uppercase}
+.ticker-inner{display:inline-flex;gap:48px;padding-block:7px;animation:tick 28s linear infinite}
+.ticker b{background:#14152b;color:var(--accent);padding:2px 8px;border-radius:3px}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* masthead */
+header.mast{padding-block:28px 12px;border-bottom:1px solid var(--line)}
+.kicker{font-family:var(--mono);font-size:12px;color:var(--accent-2);letter-spacing:.12em;text-transform:uppercase}
+h1{font-family:var(--display);font-size:clamp(34px,8vw,64px);line-height:.95;margin:.2em 0 .25em;text-wrap:balance;letter-spacing:-.01em}
+h1 span{color:var(--accent)}
+.lede{color:var(--muted);max-width:60ch;margin:0}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chip{font-family:var(--mono);font-size:12px;border:1px solid var(--line);padding:5px 10px;border-radius:99px;color:var(--fg);background:var(--panel)}
+.chip em{font-style:normal;color:var(--accent-2)}
+
+/* tabs */
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;overflow-x:auto;padding-block:10px;scrollbar-width:none}
+.tabs button{flex:none;font:600 14px var(--display);letter-spacing:.04em;text-transform:uppercase;color:var(--muted);background:transparent;border:1px solid var(--line);padding:8px 14px;border-radius:6px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.tabs button:focus-visible,.card:focus-visible,.back:focus-visible{outline:3px solid var(--accent-2);outline-offset:2px}
+
+/* section intro */
+.intro{margin-top:22px;padding:18px;border-left:4px solid var(--accent);background:var(--panel);border-radius:0 8px 8px 0}
+.intro h2{font-family:var(--display);margin:0 0 6px;font-size:22px}
+.intro p{margin:0;color:var(--muted);max-width:68ch}
+
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;padding-block:22px 48px}
+.card{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;aspect-ratio:1/1;max-width:100%;background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;transition:transform .15s,border-color .15s}
+.card:hover{transform:translateY(-3px);border-color:var(--accent)}
+.thumb{flex:1;position:relative;display:grid;place-items:center;overflow:hidden}
+.big{font-family:var(--display);font-weight:700;font-size:clamp(40px,10vw,64px);line-height:1;text-align:center;padding:0 10px;position:relative;z-index:1;text-shadow:0 3px 0 rgba(0,0,0,.35)}
+.big small{display:block;font-size:13px;font-family:var(--mono);letter-spacing:.1em;opacity:.85;margin-top:6px;text-shadow:none}
+.tag{position:absolute;top:10px;left:10px;z-index:2;font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;background:var(--bg);color:var(--accent-2);padding:4px 7px;border-radius:4px}
+.cap{padding:12px 14px 14px;background:var(--panel)}
+.cap h3{margin:0;font-family:var(--display);font-size:17px;line-height:1.15;text-wrap:balance}
+
+.t-comp{background:linear-gradient(135deg,#ff4d2e,#a3182f)}
+.t-env{background:linear-gradient(135deg,#7b4dff,#2e1a7a)}
+.t-cheat{background:repeating-linear-gradient(45deg,#2a2d58 0 14px,#232548 14px 28px)}
+.t-cheat .big{color:var(--cool)}
+.t-tac{background:linear-gradient(135deg,#ffc531,#ff7a1a);color:#14152b}
+.t-tac .big{text-shadow:none}
+
+/* article */
+.article{position:fixed;inset:0;z-index:20;background:var(--bg);overflow-y:auto;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.artbar{position:sticky;top:0;background:var(--bg);border-bottom:1px solid var(--line);z-index:2}
+.artbar .wrap{display:flex;align-items:center;gap:12px;padding-block:10px}
+.back{font:600 14px var(--display);text-transform:uppercase;letter-spacing:.05em;background:var(--panel-2);color:var(--fg);border:1px solid var(--line);padding:8px 14px;border-radius:6px;cursor:pointer}
+.artbar .src{font:12px var(--mono);color:var(--muted)}
+.hero{height:clamp(160px,32vw,260px);display:grid;place-items:center;position:relative}
+.art{max-width:720px;margin:0 auto;padding-block:24px 60px}
+.art .tag{position:static;display:inline-block}
+.art h2{font-family:var(--display);font-size:clamp(28px,6vw,42px);line-height:1.05;margin:12px 0 8px;text-wrap:balance}
+.byline{font:12px var(--mono);color:var(--muted);margin-bottom:22px}
+.art p{margin:0 0 1em;max-width:65ch}
+.art p.first::first-letter{font-family:var(--display);float:left;font-size:3.4em;line-height:.85;padding-right:8px;color:var(--accent)}
+.facts{margin:20px 0;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.facts div{display:flex;justify-content:space-between;gap:16px;padding:10px 14px;border-top:1px solid var(--line);font-size:15px}
+.facts div:first-child{border-top:0}
+.facts dt{color:var(--muted)}
+.facts dd{margin:0;font-family:var(--mono);text-align:right;font-variant-numeric:tabular-nums}
+blockquote{margin:22px 0;padding:14px 18px;background:var(--panel);border-left:4px solid var(--accent-2);font-style:italic;border-radius:0 8px 8px 0}
+.list{display:grid;gap:10px;margin:18px 0}
+.list .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px 14px;background:var(--panel);border-radius:8px;border:1px solid var(--line)}
+.badge{font:700 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:4px}
+.ok{background:var(--cool);color:#14152b}
+.ko{background:var(--accent);color:#14152b}
+.more{margin-top:34px;border-top:1px solid var(--line);padding-top:18px}
+.more h4{font:600 13px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.more button{all:unset;cursor:pointer;display:block;padding:10px 0;border-bottom:1px solid var(--line);font-family:var(--display);font-size:17px}
+.more button:hover{color:var(--accent)}
+footer{color:var(--muted);font:12px var(--mono);padding-block:0 30px;text-align:center}
+@media (prefers-reduced-motion:reduce){.ticker-inner{animation:none}.card{transition:none}}
+</style>
+</head><body>
+
+<div class="ticker" aria-hidden="true"><div class="ticker-inner" id="ticker"></div></div>
+
+<header class="mast"><div class="wrap">
+  <div class="kicker">Edición Rivals · Roblox · Argentina</div>
+  <h1>La Wikipedia <span>de Pao</span></h1>
+  <p class="lede">Todo lo que hay que saber sobre Pao: los comps que cayeron, los que lo envidian, los cheaters que enfrentó y las tácticas que nadie puede parar.</p>
+  <div class="stats">
+    <span class="chip">Nivel <em>385</em> · PC</span>
+    <span class="chip">Top <em>5</em> AR con fusil de asalto</span>
+    <span class="chip"><em>180</em> Hz</span>
+  </div>
+</div></header>
+
+<nav class="tabs" aria-label="Secciones"><div class="wrap" id="tabs"></div></nav>
+
+<main class="wrap">
+  <section class="intro" id="intro" hidden><h2 id="introTitle"></h2><p id="introText"></p></section>
+  <div class="grid" id="grid"></div>
+</main>
+<footer>La Wikipedia de Pao · información verificada por Ñeja, Mon y Tobias Wilson</footer>
+
+<div class="article" id="article" hidden role="dialog" aria-modal="true" aria-labelledby="artTitle">
+  <div class="artbar"><div class="wrap"><button class="back" id="back">← Volver</button><span class="src" id="artSrc"></span></div></div>
+  <div class="hero" id="artHero"></div>
+  <article class="art wrap" id="artBody"></article>
+</div>
+
+<script>
+const SECTIONS = {
+  comp:{name:"Comps vencidos", title:"Jugadores comps a los que Pao les ganó", cls:"t-comp",
+    text:"Pao es muy reconocido en la comunidad de Rivals en Roblox debido a sus grandes jugadas. Gracias a esto, ha podido ganar varios enfrentamientos contra jugadores comps o quedar bien en tabla contra ellos."},
+  env:{name:"Envidiosos", title:"Jugadores que envidian a Pao", cls:"t-env",
+    text:"Como Pao es considerado top 5 de Argentina con fusil de asalto, es muy criticado por figuras desconocidas de la comunidad. Normalmente son personas muy fáciles de ragebaitear y de hacer llorar."},
+  cheat:{name:"Cheaters", title:"Jugadores que usan cheats", cls:"t-cheat",
+    text:"Pao se ha enfrentado a todo tipo de cheats (fracasados): wallhack, aimbot, silent aim, teletransportación y más. Les ha podido ganar varias veces."},
+  tac:{name:"Tácticas", title:"Tácticas de Pao", cls:"t-tac",
+    text:"Pao es un jugador muy bueno en todos los aspectos: aim, movement, strafe, peeks y demás estrategias."}
+};
+
+const NEWS = [
+  {id:"mpgod57", sec:"comp", big:"1°", sub:"EN TABLA",
+   title:"Pao queda primero en tabla frente al nivel 1000 mpgod57",
+   date:"Rivals · Ranked",
+   body:[
+     "mpgod57 es nivel 1000 de teléfono, muy conocido justamente por ser nivel alto, pero también por llorar cuando le van ganando y por usar aim assist y autoshoot en cada partida.",
+     "Pao perdió contra su equipo 4 a 5, pero terminó primero en la tabla, algo muy bueno siendo un nivel 385 de PC enfrentando a un nivel 1000."
+   ],
+   facts:[["Rival","mpgod57"],["Nivel del rival","1000 (teléfono)"],["Nivel de Pao","385 (PC)"],["Resultado","4 – 5"],["Pao en tabla","1°"]],
+   quote:"Perder la ronda y ganar la tabla: eso es tener nivel."},
+  {id:"realdrpeeper", sec:"comp", big:"5–4", sub:"VICTORIA",
+   title:"Pao y Gonza derrotan 5 a 4 al equipo archnemesis de realdrpeeper",
+   date:"Rivals · Enfrentamiento",
+   body:[
+     "realdrpeeper es un jugador muy bueno de PC, actualmente archnemesis y alrededor de nivel 700. Su equipo también es archnemesis y de nivel alto.",
+     "Aun así, Pao y su compañero Gonza les pudieron ganar con un rotundo 5 a 4."
+   ],
+   facts:[["Rival","realdrpeeper"],["Rango del rival","Archnemesis"],["Nivel del rival","~700 (PC)"],["Equipo de Pao","Pao + Gonza"],["Resultado","5 – 4"]]},
+  {id:"envidiosos", sec:"env", big:"TOP 5", sub:"FUSIL DE ASALTO",
+   title:"El top 5 de Argentina con fusil de asalto desata la envidia de pepiplugg y triple",
+   date:"Comunidad · Polémica",
+   body:[
+     "Como Pao es considerado top 5 de Argentina con fusil de asalto, es muy criticado por figuras desconocidas de la comunidad como pepiplugg, triple y algunos randoms más como ellos.",
+     "Normalmente son personas muy fáciles de ragebaitear y de hacer llorar. Los dos mencionados tuvieron y usaron cheats porque son jugadores muy malos.",
+     "Varias personas dicen que Pao es malo, pero están en lo incorrecto."
+   ],
+   list:[["pepiplugg","ko","Envidioso · usó cheats"],["triple","ko","Envidioso · usó cheats"],["randoms varios","ko","Envidiosos"]]},
+  {id:"cheaters", sec:"cheat", big:"0%", sub:"CHEATS QUE FUNCIONAN",
+   title:"Wallhack, aimbot, silent aim y teletransportación: Pao ya los enfrentó a todos",
+   date:"Rivals · Anticheat humano",
+   body:[
+     "Pao se ha enfrentado a todo tipo de cheats (fracasados): wallhack, aimbot, silent aim, teletransportación y etcétera.",
+     "Les ha podido ganar varias veces. Esta es la clasificación oficial de cheaters según la Wikipedia de Pao:"
+   ],
+   list:[["gonzamalware","ok","No fracasado"],["Todos los demás cheaters que existen","ko","Fracasados"]],
+   facts:[["Wallhack","Enfrentado"],["Aimbot","Enfrentado"],["Silent aim","Enfrentado"],["Teletransportación","Enfrentado"]]},
+  {id:"rampa", sec:"tac", big:"PILAR", sub:"ARENA · 1V1",
+   title:"La táctica de la rampa y el pilar en Arena",
+   date:"Tácticas · 1v1 con amigos",
+   body:[
+     "Es la táctica que Pao suele usar en los 1v1 contra sus amigos: ir por la rampa en Arena, subirse al pilar que está enfrente de la misma y matar al enemigo en la rampa.",
+     "Funciona muy bien, aunque puede traer problemas dependiendo de si el enemigo la conoce."
+   ],
+   facts:[["Mapa","Arena"],["Modo","1v1"],["Efectividad","Muy alta"],["Punto débil","Que el rival la conozca"]]},
+  {id:"sanvalentin", sec:"tac", big:"♥", sub:"EL ABRAZO",
+   title:"\"Abrazar al rival como si fuera San Valentín\": la táctica más temida de Pao",
+   date:"Tácticas · Bautizada por Ñeja",
+   body:[
+     "El nombre lo puso el exitoso llamado Ñeja. La estrategia consiste en ir a buscar al enemigo como si fueras infiel negando ser infiel, y pegarte a él aprovechando para sacarle mucho daño.",
+     "Funciona porque Pao tiene muy buenos FPS, monitor de 180 Hz, buenos auriculares, buen mouse y, sobre todo, buenas manos.",
+     "Esta información quedó totalmente grabada en la cabeza de Pao, ya que los exitosos Ñeja, Mon y Tobias Wilson suelen recordársela tras perder una ronda."
+   ],
+   facts:[["Nombre puesto por","Ñeja"],["Monitor","180 Hz"],["Setup","FPS altos, buen mouse y auriculares"],["Testigos","Ñeja, Mon, Tobias Wilson"]],
+   quote:"Pegarse al rival y no soltarlo. Romántico y letal."}
+];
+
+const $ = s => document.querySelector(s);
+let current = "all";
+
+function renderTabs(){
+  const t = $("#tabs");
+  const opts = [["all","Portada"], ...Object.entries(SECTIONS).map(([k,v])=>[k,v.name])];
+  t.innerHTML = opts.map(([k,n])=>`<button id="tab-${k}" data-k="${k}" aria-pressed="${k===current}">${n}</button>`).join("");
+  t.querySelectorAll("button").forEach(b=>b.onclick=()=>{current=b.dataset.k;renderTabs();renderGrid();try{localStorage.setItem("pao-tab",current)}catch(e){}});
+}
+function thumb(n){
+  const s = SECTIONS[n.sec];
+  return `<span class="tag">${s.name}</span><div class="big">${n.big}<small>${n.sub}</small></div>`;
+}
+function renderGrid(){
+  const intro = $("#intro");
+  if(current==="all"){intro.hidden=true}else{intro.hidden=false;$("#introTitle").textContent=SECTIONS[current].title;$("#introText").textContent=SECTIONS[current].text}
+  const items = NEWS.filter(n=>current==="all"||n.sec===current);
+  $("#grid").innerHTML = items.map(n=>`<button class="card" data-id="${n.id}"><div class="thumb ${SECTIONS[n.sec].cls}">${thumb(n)}</div><div class="cap"><h3>${n.title}</h3></div></button>`).join("");
+  $("#grid").querySelectorAll(".card").forEach(c=>c.onclick=()=>openArticle(c.dataset.id));
+}
+function openArticle(id){
+  const n = NEWS.find(x=>x.id===id); const s = SECTIONS[n.sec];
+  $("#artSrc").textContent = s.title;
+  const hero = $("#artHero"); hero.className = "hero "+s.cls; hero.innerHTML = `<div class="big">${n.big}<small>${n.sub}</small></div>`;
+  let h = `<span class="tag">${s.name}</span><h2 id="artTitle">${n.title}</h2><div class="byline">${n.date} · Redacción Wikipedia de Pao</div>`;
+  h += n.body.map((p,i)=>`<p class="${i===0?"first":""}">${p}</p>`).join("");
+  if(n.list) h += `<div class="list">${n.list.map(([who,c,lab])=>`<div class="row"><span class="badge ${c}">${lab}</span><strong>${who}</strong></div>`).join("")}</div>`;
+  if(n.quote) h += `<blockquote>${n.quote}</blockquote>`;
+  if(n.facts) h += `<dl class="facts">${n.facts.map(([a,b])=>`<div><dt>${a}</dt><dd>${b}</dd></div>`).join("")}</dl>`;
+  const others = NEWS.filter(x=>x.id!==id).slice(0,4);
+  h += `<div class="more"><h4>Más noticias</h4>${others.map(o=>`<button data-id="${o.id}">${o.title}</button>`).join("")}</div>`;
+  $("#artBody").innerHTML = h;
+  $("#artBody").querySelectorAll(".more button").forEach(b=>b.onclick=()=>openArticle(b.dataset.id));
+  const a = $("#article"); a.hidden=false; a.scrollTop=0; document.body.style.overflow="hidden"; $("#back").focus();
+}
+function closeArticle(){ $("#article").hidden=true; document.body.style.overflow=""; }
+$("#back").onclick = closeArticle;
+window.paoBack = function(){ if(!$("#article").hidden){ closeArticle(); return true; } return false; };
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#article").hidden)closeArticle()});
+
+const tick = ["Pao queda 1° en tabla vs un nivel 1000","Pao y Gonza ganan 5–4 a realdrpeeper","Top 5 AR con fusil de asalto","Cheaters fracasados: todos menos gonzamalware","Nueva táctica: el abrazo de San Valentín"];
+const tickHTML = tick.map(t=>`<span><b>Último momento</b> ${t}</span>`).join("");
+$("#ticker").innerHTML = tickHTML + tickHTML;
+
+try{const saved=localStorage.getItem("pao-tab"); if(saved&&(saved==="all"||SECTIONS[saved]))current=saved}catch(e){}
+renderTabs(); renderGrid();
+</script>
+</body></html>
